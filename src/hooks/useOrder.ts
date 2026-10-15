@@ -1,9 +1,38 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { MenuItem, OrderItem } from '../types'
+// decidi agregar lo del local storage para que quede mas chicles bomba
+const ORDER_KEY = 'order'
+const TIP_KEY = 'tip'
+
+const loadOrder = (): OrderItem[] => {
+  try {
+    const stored = localStorage.getItem(ORDER_KEY)
+    return stored ? JSON.parse(stored) : []
+  } catch {
+    return []
+  }
+}
+
+const loadTip = (): number => {
+  try {
+    const stored = localStorage.getItem(TIP_KEY)
+    return stored ? Number(stored) : 0
+  } catch {
+    return 0
+  }
+}
 
 export default function useOrder() {
-  const [order, setOrder] = useState<OrderItem[]>([])
-  const [tip, setTip] = useState(0)
+  const [order, setOrder] = useState<OrderItem[]>(loadOrder)
+  const [tip, setTip] = useState<number>(loadTip)
+
+  useEffect(() => {
+    localStorage.setItem(ORDER_KEY, JSON.stringify(order))
+  }, [order])
+
+  useEffect(() => {
+    localStorage.setItem(TIP_KEY, String(tip))
+  }, [tip])
 
   const addItem = (item: MenuItem) => {
     const itemExists = order.find((orderItem) => orderItem.id === item.id)

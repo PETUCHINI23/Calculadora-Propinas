@@ -16,6 +16,7 @@ export default function OrderTotals({ order, tip, placeOrder }: OrderTotalsProps
   )
   const tipAmount = useMemo(() => subtotalAmount * tip, [subtotalAmount, tip])
   const totalAmount = useMemo(() => subtotalAmount + tipAmount, [subtotalAmount, tipAmount])
+  
 
 
 
